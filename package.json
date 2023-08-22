@@ -1,0 +1,16 @@
+{
+  "name": "blog_system_apis",
+  "version": "1.0.0",
+  "description": "blog_system_apis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hassan Ismat",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "sequelize": "^6.32.1"
+  }
+}
