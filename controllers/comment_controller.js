@@ -44,7 +44,26 @@ function showAll(req,res){
         })
     })
 }
+function showOne(req,res){
+    
+    models.Comment.findOne({where:{id:req.params.id}}).then(result =>{
+        console.log(result);
+        if(!result){
+            console.log(result);
+            res.status(404).send("Not Post Found");
+        }else{
+            res.status(200).json(result);
+        }
+    }).catch(err =>{
+        res.status(500).json({
+            message:"Internal Server Error",
+            error:err
+        })
+    })
+}
+
 module.exports = {
     createComment:createComment,
-    showAll:showAll
+    showAll:showAll,
+    showOne:showOne
 }
