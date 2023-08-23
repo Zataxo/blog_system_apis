@@ -61,9 +61,59 @@ function showOne(req,res){
         })
     })
 }
+function deleteComment(req,res){
+    models.Comment.destroy({where:{id:req.params.id}}).then(result =>{
+        if(result == 1){
+            res.status(200).send("Post Deleted Successfully")
+        }else{
+            res.status(404).send("Post not found")
+        }
+    }).catch(err =>{
+        res.status(500).json({
+            message:"Internal Server Error",
+            error:err
+        })
+    })
+}
+function updatedComment(req,res){
+    const comment = req.body;
+    const schema = {
+        content:{type:"string",optional:false,max:100},
+        postId:{type:"number",optiona:false},
+        userId:{type:"number",optional:false}
+    }
+    const v = new validator();
+    const validationResponse = v.validate(comment,schema);
+    if(validationResponse != true){
+        res.status(400).json({
+            message:"Vaildation Failed",
+            reason:validationResponse
+        });
+    }else{
+        const userId = req.params.userId;
+        const postId = req.params.postId;
+        models.Comment.update(comment,{where:{userId:userId,postId:postId}}).then(result =>{
+            if(result == 1){
+                res.status(200).json({
+                    message:"Comment Updated Successfully",
+                    result:comment
+                })
+            }else{
+                req.status(404).send("Comment not found");
+            }
+        }).catch(err =>{
+            res.status(500).json({
+                message:"Internal Server Error",
+                error:err
+            })
+        })
+    }
+}
 
 module.exports = {
     createComment:createComment,
     showAll:showAll,
-    showOne:showOne
+    showOne:showOne,
+    deleteComment:deleteComment,
+    updatedComment:updatedComment
 }
