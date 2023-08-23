@@ -30,6 +30,21 @@ function createComment(req,res){
     }
     
 }
+function showAll(req,res){
+    models.Comment.findAndCountAll().then(result =>{
+        if(result.count == 0){
+            res.status(404).send("Not Post Found");
+        }else{
+            res.status(200).json(result.rows);
+        }
+    }).catch(err =>{
+        res.status(500).json({
+            message:"Internal Server Error",
+            error:err
+        })
+    })
+}
 module.exports = {
-    createComment:createComment
+    createComment:createComment,
+    showAll:showAll
 }
