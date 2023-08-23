@@ -135,6 +135,9 @@ function deletePost(req,res){
         })
     })
 }
+function test(req,res){
+    
+}
 
 module.exports = {
     createPost:createPost,
