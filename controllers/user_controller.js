@@ -57,6 +57,52 @@ function signUp(req, res) {
       });
     });
 }
+// Login function
+function login(req, res) {
+  models.User.findOne({ where: { email: req.body.email } })
+    .then((user) => {
+      //   console.log(user);
+      if (user == null) {
+        res.status(401).json({
+          message: "Invaild Email",
+        });
+      } else {
+        bcryprtjs.compare(
+          req.body.password,
+          user.password,
+          function (err, result) {
+            // console.log(result);
+            if (result) {
+              jsw.sign(
+                {
+                  email: req.body.email,
+                  userId: user.id,
+                },
+                "secret",
+                function (err, token) {
+                  res.status(200).json({
+                    message: "Authenticated!!!",
+                    token: token,
+                  });
+                }
+              );
+            } else {
+              res.status(401).json({
+                message: "Invaild Password",
+              });
+            }
+          }
+        );
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        message: "Internal Server Error",
+        error: err,
+      });
+    });
+}
 module.exports = {
   signUp: signUp,
+  login: login,
 };

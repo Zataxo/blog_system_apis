@@ -7,6 +7,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use("/posts", postRoute);
 app.use("/comments", commentRoute);
-app.use("/users", userRoute);
+app.use("/user", userRoute);
 
 module.exports = app;
