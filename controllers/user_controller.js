@@ -74,11 +74,15 @@ function login(req, res) {
             // console.log(result);
             if (result) {
               jsw.sign(
+                // {payload,secret,expiration,callback function}
                 {
                   email: req.body.email,
                   userId: user.id,
                 },
-                "secret",
+                process.env.JWT_KEY,
+                {
+                  expiresIn: "24h",
+                },
                 function (err, token) {
                   res.status(200).json({
                     message: "Authenticated!!!",
