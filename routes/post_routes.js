@@ -5,6 +5,10 @@ const router = express.Router();
 router.post("/", checkAuthMiddleWare.checkAuth, postController.createPost);
 router.get("/:id", postController.showOne);
 router.get("/", postController.showAll);
-router.patch("/:id", postController.updatePost);
-router.delete("/:id&:userId", postController.deletePost); // /:id/:userId or /:id&:userId
+router.patch("/:id", checkAuthMiddleWare.checkAuth, postController.updatePost);
+router.delete(
+  "/:id&:userId",
+  checkAuthMiddleWare.checkAuth,
+  postController.deletePost
+); // /:id/:userId or /:id&:userId
 module.exports = router;
