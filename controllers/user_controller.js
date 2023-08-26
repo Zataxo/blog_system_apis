@@ -59,6 +59,7 @@ function signUp(req, res) {
 }
 // Login function
 function login(req, res) {
+  console.log(req.body);
   models.User.findOne({ where: { email: req.body.email } })
     .then((user) => {
       //   console.log(user);
@@ -87,6 +88,7 @@ function login(req, res) {
                   res.status(200).json({
                     message: "Authenticated!!!",
                     token: token,
+                    userModel: user,
                   });
                 }
               );
