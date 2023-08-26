@@ -4,6 +4,7 @@ const jsw = require("jsonwebtoken");
 const validator = require("fastest-validator");
 
 function signUp(req, res) {
+  console.log(req.body);
   const userPass = req.body.password;
   models.User.findOne({ where: { email: req.body.email } })
     .then((result) => {
