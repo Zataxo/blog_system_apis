@@ -6,13 +6,12 @@ function createPost(req, res) {
     content: req.body.content,
     imageUrl: req.body.imageUrl,
     categoryId: req.body.categoryId,
-    userId: 3,
+    userId: req.userData.userId,
   };
   const schema = {
     title: { type: "string", optional: false, max: 100 },
     content: { type: "string", optional: false },
     categoryId: { type: "number", optional: false },
-    userId: { type: "number", optional: false },
   };
   const v = new validator();
   const validationResponse = v.validate(post, schema);
@@ -22,19 +21,29 @@ function createPost(req, res) {
       error: validationResponse,
     });
   } else {
-    models.Post.create(post)
+    models.Category.findByPk(req.body.categoryId)
       .then((result) => {
-        res.status(201).json({
-          message: "Post Created Successfully",
-          result: result,
-        });
+        if (result != null) {
+          models.Post.create(post)
+            .then((result) => {
+              res.status(201).json({
+                message: "Post Created Successfully",
+                result: result,
+              });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                message: "Internal Server Error",
+                error: err,
+              });
+            });
+        } else {
+          res.status(400).json({
+            message: "Invalid category ID",
+          });
+        }
       })
-      .catch((err) => {
-        res.status(500).json({
-          message: "Internal Server Error",
-          error: err,
-        });
-      });
+      .catch();
   }
 }
 function showOne(req, res) {
